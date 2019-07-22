@@ -4,13 +4,13 @@
 import requests
 import xml.dom.minidom as dom
 
-def dl_track(track_url, track_name):
+def dl_track(track_url, track_name, destination="."):
     #TODO : skip download if the file already exist ?
     r = requests.get(track_url)
-    with open(track_name, "wb") as code:
+    with open(destination + track_name, "wb") as code:
         code.write(r.content)
 
-def download_from_rss(rss_url):
+def download_from_rss(rss_url, destination="."):
     rss = requests.get(rss_url)
 
     dom3 = dom.parseString(rss.content)
@@ -22,15 +22,15 @@ def download_from_rss(rss_url):
         url_elem = a_track.getElementsByTagName('link')[0]
         track_id = url_elem.childNodes[0].data.split('/')[-1]
         track_url = "http://www.openstreetmap.org/trace/{}/data".format(track_id)
-        dl_track(track_url, title)
+        dl_track(track_url, title, destination)
 
-def download_all_tracks_from_user(user):
+def download_all_tracks_from_user(user, destination="."):
     url1 = "http://www.openstreetmap.org/user/"+user+"/traces/rss"
-    download_from_rss(url1)
+    download_from_rss(url1, destination)
 
-def download_all_tracks_from_tag(tag):
+def download_all_tracks_from_tag(tag, destination="."):
     url1 = "https://www.openstreetmap.org/traces/tag/"+tag+"/rss"
-    download_from_rss(url1)
+    download_from_rss(url1, destination)
 
 if __name__ == '__main__':
     for index in range(10):
