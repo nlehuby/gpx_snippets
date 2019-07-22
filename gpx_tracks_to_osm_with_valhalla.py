@@ -12,6 +12,22 @@ default_trace_attributes_url = "https://valhalla.mapzen.com/trace_attributes?api
 trace_route_url = os.getenv('valhalla_trace_route_url', default_trace_route_url)
 trace_attributes_url = os.getenv('valhalla_trace_attributes_url', default_trace_route_url)
 
+def gpx_to_list(gpx_item):
+    gpx_as_list = []
+    for track in gpx_item.tracks:
+        for segment in track.segments:
+            for point in segment.points:
+                coord = {}
+                coord["lon"] = point.longitude
+                coord["lat"] = point.latitude
+                gpx_as_list.append(coord)
+    return gpx_as_list
+
+def gpx_to_txt(gpx_item):
+    shape_as_txt = str(gpx_to_list(gpx_item))
+    shape_as_txt = shape_as_txt.replace("'","\"")
+    return shape_as_txt
+
 def geojson_to_text(a_geojson):
     """ transform a geojson in a txt parameter that you can send to valhalla
     """
@@ -98,20 +114,11 @@ def from_shape_to_way_list(coord):
 
 
 if __name__ == '__main__':
-    gpx_shape = []
 
     with open("./Lien vers 2017-10-31_20-06-03.gpx", "r") as gpx_file:
         gpx = gpxpy.parse(gpx_file)
+        shape_txt = gpx_to_txt(gpx)
 
-        for track in gpx.tracks:
-            for segment in track.segments:
-                for point in segment.points:
-                    coord = {}
-                    coord["lon"] = point.longitude
-                    coord["lat"] = point.latitude
-                    gpx_shape.append(coord)
-    shape_txt = str(gpx_shape)
-    shape_txt = shape_txt.replace("'","\"")
     tt = from_shape_to_way_list(shape_txt)
 
     if tt is not None:
