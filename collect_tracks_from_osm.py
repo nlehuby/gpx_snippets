@@ -24,15 +24,19 @@ def download_from_rss(rss_url, destination="."):
         track_url = "http://www.openstreetmap.org/trace/{}/data".format(track_id)
         dl_track(track_url, title, destination)
 
-def download_all_tracks_from_user(user, destination="."):
+def download_last_tracks_from_user(user, destination="."):
     url1 = "http://www.openstreetmap.org/user/"+user+"/traces/rss"
     download_from_rss(url1, destination)
 
-def download_all_tracks_from_tag(tag, destination="."):
+def download_last_tracks_from_tag(tag, destination="."):
     url1 = "https://www.openstreetmap.org/traces/tag/"+tag+"/rss"
     download_from_rss(url1, destination)
+
+
+def download_all_tracks_from_tag(tag, destination="."):
+    pass
 
 if __name__ == '__main__':
     for index in range(10):
         user_id = "accramobileghana" + str(index +1)
-        download_all_tracks_from_user(user_id)
+        download_last_tracks_from_user(user_id)
