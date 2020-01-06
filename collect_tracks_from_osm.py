@@ -1,16 +1,19 @@
 # coding: utf-8
 ### nlehuby - AccraMobile3
 
+import os
 import requests
 import xml.dom.minidom as dom
 from lxml import html
 
 
+
 def dl_track(track_url, track_name, destination="."):
-    #TODO : skip download if the file already exist ?
-    r = requests.get(track_url)
-    with open(destination + track_name, "wb") as code:
-        code.write(r.content)
+    file_name = destination + track_name
+    if not os.path.isfile(file_name):
+        r = requests.get(track_url)
+        with open(file_name, "wb") as code:
+            code.write(r.content)
 
 def download_from_rss(rss_url, destination="."):
     rss = requests.get(rss_url)
