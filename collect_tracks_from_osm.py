@@ -42,8 +42,8 @@ def collect_tracks_from_one_page(page_prefix, page_id):
     page = requests.get(page_url)
     tree = html.fromstring(page.content)
 
-    trace_names = tree.xpath('//tr/td[2]/a[1]/text()')
-    trace_links = tree.xpath('//tr/td[2]/a[1]/attribute::href')
+    trace_names = tree.xpath('//tr/td[2]/ul/li[1]/a/text()')
+    trace_links = tree.xpath('//tr/td[2]/ul/li[1]/a/attribute::href')
 
     results = []
     for id_, trace_name in enumerate(trace_names):
@@ -57,7 +57,7 @@ def collect_tracks_from_one_page(page_prefix, page_id):
 
 def collect_all_tracks_from_tag(tag):
     elems = []
-    for page_number in range(124):
+    for page_number in range(13):
         result_page = collect_tracks_from_one_page("https://www.openstreetmap.org/traces/tag/{}".format(tag), page_number +1)
         elems += result_page
         if not result_page :
